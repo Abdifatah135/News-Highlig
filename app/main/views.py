@@ -1,25 +1,28 @@
-from flask import render_template
-from app import app
-from ..requests import get_movies,get_movie,search_movie
-from .forms import ReviewForm
-from ..models import Review
+from flask import render_template,request,redirect,url_for
+from . import main
+from ..requests import get_sources,get_articles
+from ..models import Sources
 
-# Views
-@app.route('/')
+#views
+@main.route('/')
 def index():
-    
-    '''
-    View root page function that returns the index page and its data
-    '''
+	'''
+	view root page function that returns the index the page and its data
+	'''
+	sources = get_sources('business')
+	sports_sources = get_sources('sports')
+	technology_sources = get_sources('technology')
+	entertainment_sources = get_sources('entertainment')
+	title = "News Highlighter"
 
-    title = 'Home - Welcome to The best Movie Review Website Online'
-    return render_template('index.html', title = title)
+	return render_template('index.html',title = title, sources = sources,sports_sources = sports_sources,technology_sources = technology_sources,entertainment_sources = entertainment_sources)
 
+@main.route('/sources/<id>')
+def articles(id):
+	'''
+	view articles page
+	'''
+	articles = get_articles(id)
+	title = f'NH | {id}'
 
-@app.route('/news/<int:news_id>')
-def news(news_id):
-
-    '''
-    View news page function that returns the news details page and its data
-    '''
-    return render_template('news.html',id = news_id)
+	return render_template('articles.html',title= title,articles = articles)
