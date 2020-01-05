@@ -1,11 +1,11 @@
-from flask import render_template,redirect,url_for,request
-from . import main
+import urllib.request,json
+from .models import Sources,Articles
+from datetime import datetime
 
-# Views
-@main.route('/')
-def index():
+#getting the api key
+api_key = None
 
-    '''
-    View root page function that returns the index page and its data
-    '''
-    return render_template('index.html')
+#getting the news base url
+base_url = None
+
+#getting the articlces url
